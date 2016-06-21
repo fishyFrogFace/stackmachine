@@ -1,0 +1,23 @@
+data fish
+data 9 monkey
+data 9284 foo
+
+start
+	push 1
+	push -27
+	push 3
+	push 27
+	push 46
+	push 81
+	push 2
+	push 5
+	push 9
+	pop fish
+	data 99 bar
+	stop
+end
+
+smallest
+	jmp smallest	
+end
+end
