@@ -30,8 +30,9 @@ def runAsm(asm):
             'jmp': programFlow.jmp, 'end': programFlow.end, 'push': stackOperations.push,
             'pop': stackOperations.pop, 'drop': stackOperations.drop, 'dup': stackOperations.dup,
             'swap': stackOperations.swap, 'popa': stackOperations.popa, 'pull': stackOperations.pull,
-            'rot': stackOperations.rot, 'data': data}
+            'rot': stackOperations.rot}
 
+    #iterate through source to identify functions
     for instruction in range(0, progLength):
         asm[instruction] = asm[instruction].split()
         current = asm[instruction]
@@ -40,6 +41,7 @@ def runAsm(asm):
             if op not in operations:
                 functions[op] = instruction
 
+    #set startpoint from last 'end' statement
     if len(current) > 1:
         func = programFlow.end(current)
         pc = functions[func]
@@ -59,24 +61,20 @@ def runAsm(asm):
                     data[instruction[1]] = None
                 pc += 1
             elif op in operations and len(instruction) != 0:
-                if op == 'data':
-                    try:
-                        data[instruction[2]] = int(instruction[1])
-                    except ValueError:
-                        data[instruction[1]] = None
-                    pc += 1
-                elif op == 'pop':
+
+                method = operations[op]
+                
+                if op == 'pop':
                     var = instruction[1]
                     if  var in data:
                         data[var],stack = stackOperations.pop(stack)
-                        print(data[var])
                     else:
                         variable,stack = stackOperations.pop(stack)
-                    pc += 1
+                    break
+
                 elif len(instruction) > 1 and instruction[1] in data:
                     instruction[1] = data[instruction[1]]
-                
-                method = operations[op]
+                    print('Instruction 1 changed to: '+ str(instruction[1]))
 
                 if op in ['jtrue', 'jfalse']:
                     stack,func = method(stack, instruction)
@@ -119,7 +117,8 @@ def runAsm(asm):
 
         print(data)
         print(stack)
-        input()
+        print()
+        #input()
 
 ##    hi = []
 ##    for i in operations:

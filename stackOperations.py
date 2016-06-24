@@ -8,7 +8,7 @@ def dup(stack):
 
 def pop(stack):
     a = stack.pop()
-    return (a, stack)
+    return a,stack
 
 def popa(memory, stack):
     address = stack.pop()
