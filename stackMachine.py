@@ -5,10 +5,9 @@ import stackOperations
 def data():
     pass
 
-def runAsm(asm):
+def runAsm(asm, stack=[]):
     '''Takes source as a list of instructions, executes instructions on stack'''
     pc = 0
-    stack = []
     returnStack = []
     variable = 0
     memory = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -70,45 +69,45 @@ def runAsm(asm):
                         data[var],stack = stackOperations.pop(stack)
                     else:
                         variable,stack = stackOperations.pop(stack)
-                    break
 
-                elif len(instruction) > 1 and instruction[1] in data:
-                    instruction[1] = data[instruction[1]]
-                    print('Instruction 1 changed to: '+ str(instruction[1]))
+                else:
+                    if len(instruction) > 1 and instruction[1] in data:
+                        instruction[1] = data[instruction[1]]
+                        print('Instruction 1 changed to: '+ str(instruction[1]))
 
-                if op in ['jtrue', 'jfalse']:
-                    stack,func = method(stack, instruction)
-                    pc = functions[func]
-                elif op == 'jmp':
-                    func = method(instruction)
-                    pc = functions[func]
-                elif op == 'call':
-                    func = method(instruction)
-                    returnStack.append(pc+1)
-                    #print(returnStack)
-                    pc = functions[func]
-                elif op == 'ret':
-                    pc,returnStack = method(returnStack)
-                elif op == 'push':
-                    stack = method(stack, instruction)
-                    pc += 1
-                elif op in ['popa', 'pull']:
-                    memory,stack = method(memory, stack)
-                    pc += 1
-                    print(memory)
-                elif op == 'stop':
-                    func = method()
-                    pc = functions[func]
-                    print(pc)
-                elif op == 'end':
-                    if len(instruction) < 2 or pc == progLength-1:
-                        pc += 1
-                    else:
+                    if op in ['jtrue', 'jfalse']:
+                        stack,func = method(stack, instruction)
+                        pc = functions[func]
+                    elif op == 'jmp':
                         func = method(instruction)
                         pc = functions[func]
-                else:
-                    stack = method(stack)
-                    pc += 1
+                    elif op == 'call':
+                        func = method(instruction)
+                        returnStack.append(pc+1)
+                        #print(returnStack)
+                        pc = functions[func]
+                    elif op == 'ret':
+                        pc,returnStack = method(returnStack)
+                    elif op == 'push':
+                        stack = method(stack, instruction)
+                        pc += 1
+                    elif op in ['popa', 'pull']:
+                        memory,stack = method(memory, stack)
+                        pc += 1
+                        print(memory)
+                    elif op == 'stop':
+                        func = method()
+                        pc = functions[func]
+                        print(pc)
+                    elif op == 'end':
+                        if len(instruction) < 2 or pc == progLength-1:
+                            pc += 1
+                        else:
+                            func = method(instruction)
+                            pc = functions[func]
+                    else:
+                        stack = method(stack)
+                        pc += 1
             else:
                 pc += 1
 
@@ -124,14 +123,16 @@ def runAsm(asm):
 ##    for i in operations:
 ##        hi.append(i)
 ##    print(hi)
+    print('Why are we here? because break')
     print(data)
     return stack
 
 def main():
-    inputf = open('source2.txt')
+    inputf = open('source3.txt')
     asm = [line.strip('\n').strip('\t') for line in inputf.readlines()]
+    stack = [1, 6, -4, 7, 6, 9, 34, -5, 0, 4, 39, 3]
 
-    print(runAsm(asm))
+    print(runAsm(asm, stack))
 
 main()
 

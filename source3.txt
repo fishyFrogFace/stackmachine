@@ -1,0 +1,27 @@
+main
+
+data lowest
+data temp
+
+pop lowest
+
+startloop
+	dup
+	jfalse slutt
+	dup
+	pop temp
+	
+	push lowest
+	lt
+	jfalse startloop
+	
+	push temp
+	pop lowest
+	jmp startloop
+	
+slutt
+	drop
+	push lowest
+	
+
+end main
