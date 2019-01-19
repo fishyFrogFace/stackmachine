@@ -44,8 +44,6 @@ def runAsm(asm, stack=[]):
     if len(current) > 1:
         func = programFlow.end(current)
         pc = functions[func]
-
-    #print(functions, pc)
         
     while pc < progLength:
         instruction = asm[pc]
@@ -119,22 +117,13 @@ def runAsm(asm, stack=[]):
         print()
         #input()
 
-##    hi = []
-##    for i in operations:
-##        hi.append(i)
-##    print(hi)
-    print('Why are we here? because break')
-    print(data)
     return stack
 
 def main():
-    inputf = open('source3.txt')
+    inputf = open('source.txt')
     asm = [line.strip('\n').strip('\t') for line in inputf.readlines()]
-    stack = [1, 6, -4, 7, 6, 9, 34, -5, 0, 4, 39, 3]
 
-    print(runAsm(asm, stack))
+    print(runAsm(asm))
 
-main()
-
-#if __name__ == '__main__':
-#    main()
+if __name__ == '__main__':
+    main()
