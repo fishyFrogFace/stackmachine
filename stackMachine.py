@@ -67,6 +67,7 @@ def runAsm(asm, stack=[]):
                         data[var],stack = stackOperations.pop(stack)
                     else:
                         variable,stack = stackOperations.pop(stack)
+                        pc+=1
 
                 else:
                     if len(instruction) > 1 and instruction[1] in data:
